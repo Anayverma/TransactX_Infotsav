@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { verifyToken, verifyTokenLogin } from "@/lib/jwt";
 import DefaultLayout from "@/components/DefaultLayout";
 
+
 function useLocalStorage(key, initialValue) {
   const [storedValue, setStoredValue] = useState(() => {
     try {
@@ -64,8 +65,13 @@ const Profile = () => {
 
   // Fetch wallets from localStorage
   useEffect(() => {
-    const storedWallets = JSON.parse(localStorage.getItem("wallet")) || [];
-    setWallets(storedWallets);
+    try {
+      const storedWallets = JSON.parse(localStorage.getItem("wallet")) || [];
+      setWallets(storedWallets);
+    } catch (error) {
+      console.error("Error parsing JSON from localStorage:", error);
+      setWallets([]); // Fallback to empty array
+    }
   }, []);
 
   // Handle wallet integration with MetaMask
@@ -130,16 +136,17 @@ const Profile = () => {
 
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-6 sm:p-8 md:p-10 lg:p-12">
-        <div className="max-w-xl mx-auto bg-white border border-gray-300 rounded-lg shadow-lg p-6 sm:p-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center text-gray-900">
+      <div style={{ backgroundColor: "black" }}>
+      <div className="container mx-auto p-6 sm:p-8 md:p-10 lg:p-12" >
+        <div className="max-w-xl mx-auto bg-black border border-gray-300 rounded-lg shadow-lg p-6 sm:p-8 " style={styles.container}>
+        <h2 style={styles.header}>
             Dashboard
           </h2>
           {username ? (
             <>
               <div className="mb-6 text-center">
-                <p className="text-lg text-gray-700">Welcome back, {username}!</p>
-                <p className="text-lg text-gray-700">
+                <p className="text-lg text-gray-400">Welcome back, {username}!</p>
+                <p className="text-lg text-gray-400">
                   Your UPI ID: {username}@IND
                 </p>
               </div>
@@ -162,13 +169,13 @@ const Profile = () => {
                   </select>
                   <button
                     onClick={handleSetDefault}
-                    className="mt-4 w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    className="mt-4 w-full bg-[#2c2c2c] text-white px-4 py-2 rounded-md hover:bg-[#0d1b2a]"
                   >
                     Set Default Wallet
                   </button>
                   <button
                     onClick={handleWalletIntegration}
-                    className="mt-4 w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                    className="mt-4 w-full bg-[#2c2c2c] text-white px-4 py-2 rounded-md hover:bg-[#0d1b2a]"
                   >
                     Add Wallet
                   </button>
@@ -178,7 +185,7 @@ const Profile = () => {
                   <p className="text-lg text-gray-700">No wallets found.</p>
                   <button
                     onClick={handleWalletIntegration}
-                    className="mt-4 w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                    className="mt-4 w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-[#0d1b2a]"
                   >
                     Add Wallet
                   </button>
@@ -190,60 +197,85 @@ const Profile = () => {
           )}
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 mt-6 border-t border-gray-300">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 mt-6 border-t  border-gray-300"  >
         {[
+          
           {
             title: "Pay Money",
             description: "Pay Money from your account",
-            staticImg: "https://i.ibb.co/NNt7D5p/Screenshot-2024-10-18-181917.png",
+            // staticImg: "https://i.ibb.co/pX4d1LS/Screenshot-2024-10-18-181917-removebg-preview.png",
             gifSrc: "https://media.tenor.com/lE5QV8hqwNsAAAAi/bunny.gif"
           },
           {
             title: "Receive money",
             description: "Receive money from other users",
-            staticImg: "https://via.placeholder.com/150",
+            // staticImg: "https://via.placeholder.com/150",
             gifSrc: "https://media.tenor.com/T9nttMn6GZQAAAAi/wheres-my-money-where-is-my-money.gif"
           },
           {
             title: "Exchange with Cash",
             description: "Get cash and pay online later",
-            staticImg: "https://i.ibb.co/ZKMJJTk/Screenshot-2024-10-18-182256.png",
+            // staticImg: "https://i.ibb.co/ZKMJJTk/Screenshot-2024-10-18-182256.png",
             gifSrc: "https://media.tenor.com/RN44UiLCcsYAAAAi/dollar-dollars.gif"
           },
           {
             title: "History",
             description: "Details of your past transactions",
-            staticImg: "https://i.ibb.co/4s4s29n/Screenshot-2024-10-18-183025.png",
+            // staticImg: "https://i.ibb.co/4s4s29n/Screenshot-2024-10-18-183025.png",
             gifSrc: "https://media.tenor.com/OZRgS-hByvEAAAAi/weve-made-history-stan-marsh.gif"
           }
+          
         ].map((box, index) => (
           <div 
-            key={index} 
-            className={`flex items-center justify-between p-6 sm:p-8 md:p-10 lg:p-12 border border-gray-300 rounded-lg bg-white shadow-md transition-shadow duration-300 ${hoveredIndex === index ? 'shadow-lg glow-effect' : ''}`}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
+  key={index} 
+  className={`flex items-center justify-between p-6 sm:p-8 md:p-10 lg:p-12 border border-gray-300 rounded-lg bg-[#0d1b2a] shadow-md transition-shadow duration-300 ${hoveredIndex === index ? 'shadow-lg' : ''}`} 
+  onMouseEnter={() => setHoveredIndex(index)} 
+  onMouseLeave={() => setHoveredIndex(null)}
+  style={hoveredIndex === index ? styles.glowEffect : {}}
+>
             <div className="flex flex-col text-left flex-grow">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-900">{box.title}</h2>
+              <h2 className="text-2xl font-semibold mb-6 text-white">{box.title}</h2>
               <p className="text-lg text-gray-700">{box.description}</p>
             </div>
             <div className="gif-container relative w-24 h-24 ml-4"> {/* Increased size */}
               <img 
-                src={box.staticImg} 
-                alt="Static Image" 
-                className={`static-img absolute top-0 left-0 w-full h-full ${hoveredIndex === index ? 'opacity-0' : 'opacity-100'}`} 
+                src={box.gifSrc} 
+                alt="GIF" 
+                // alt="Static Image" 
+                className={`gif  absolute grayscale top-0 left-0 w-full h-full ${hoveredIndex === index ? 'opacity-0' : 'opacity-100'}`} 
               />
               <img 
                 src={box.gifSrc} 
                 alt="GIF" 
-                className={`gif absolute top-0 left-0 w-full h-full ${hoveredIndex === index ? 'opacity-100' : 'opacity-0'}`} 
+                className={`gif absolute  top-0 left-0 w-full h-full ${hoveredIndex === index ? 'opacity-100' : 'opacity-0'}`} 
               />
             </div>
           </div>
         ))}
+      </div>
       </div>
     </DefaultLayout>
   );
 };
 
 export default Profile;
+
+const styles = {
+  header: {
+    color: 'white',
+    fontSize: '4rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    background: "linear-gradient(to bottom, #8c8c8c, #000000)",
+    WebkitBackgroundClip: "text",
+    color: "transparent",
+    // marginLeft: '0%',
+  },
+  container:{
+    boxShadow: '0 4px 15px rgba(255, 255, 255, 0.9)',
+  },
+  glowEffect: {
+    boxShadow: '0 4px 15px rgba(255, 255, 255, 0.9)', /* Blue glow */
+  },
+  
+};

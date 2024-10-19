@@ -7,13 +7,15 @@ import Navbar from '@/components/Navbar';
 
 const Page = () => {
   return (
-    <div>
+    <div className='bg-black'>
     {/* <Navbar/> */}
 
       <SignUp /> {/* Original SignUp Component */}
+    
 
-      <div className="text-center mt-4">
-        <p>
+
+      <div className="text-center mt-4 bg-black" >
+        <p className="text-white">
           Already have an account? 
           <Link href="/login" className="text-blue-500 underline ml-2">
             Login

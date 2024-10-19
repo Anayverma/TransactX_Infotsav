@@ -111,3 +111,29 @@ export async function setDefaultWallet(email, defaultWallet) {
     throw new Error('Database query failed');
   }
 }
+
+export async function findUserByEmailWithWallets(email) {
+  try {
+    // SQL query to fetch user data including wallets and default wallet
+    const query = `
+      SELECT u.username, u.password, u.wallets, d.default_wallet
+      FROM users u
+      LEFT JOIN defaultwallet d ON u.email = d.email
+      WHERE u.email = $1
+    `;
+    const values = [email];
+
+    // Execute the query
+    const result = await pool.query(query, values);
+
+    // Check if the user exists and return the first row
+    if (result.rows.length > 0) {
+      return result.rows[0]; // Return user data including wallets and default wallet
+    } else {
+      return null; // No user found with the provided email
+    }
+  } catch (error) {
+    console.error('Database query error:', error);
+    throw error; // Rethrow the error for higher-level error handling
+  }
+}

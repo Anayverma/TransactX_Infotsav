@@ -25,8 +25,12 @@ const Navbar = () => {
   return (
 <div className="bg-[#1b263b] h-[10vh] w-[95%] text-white flex flex-row justify-between items-center m-[2%] rounded-lg">
 
-      <div className="mx-9">
-        <Link href="/">UPI 2.0</Link>
+      <div >
+      <img 
+          className="w-[7rem]  m-4 mt-10 " 
+          alt="logo" 
+          src="https://i.ibb.co/NrrKF9j/image-removebg-preview.png"
+        />
       </div>
       <div className="mx-9">
         <Link

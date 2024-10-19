@@ -30,12 +30,14 @@ export default function Header() {
     };
 
     return (
-        <header className="sticky top-0 w-full z-50 backdrop-blur-sm bg-opacity-60 bg-white mb-16">
-            <div className="flex flex-col flex-wrap max-w-5xl p-2.5 mx-auto md:flex-row">
-                <div className="flex flex-row items-center justify-between p-2 md:p-1">
-                    <Link href="/" className="mb-4 text-2xl font-bold text-black transition duration-300 hover:text-gray-300 md:mb-0">
-                        UPI 2.0
-                    </Link>
+        <header className="sticky top-0 w-full z-50 backdrop-blur-sm bg-opacity-60 bg-black text-white mb-16">
+            <div className="flex flex-col flex-wrap max-w-5xl p-2.5 mx-auto md:flex-row  ">
+                <div className="flex flex-row items-center justify-between p-2 md:p-1 text-white">
+                <img 
+          className="w-[5rem]  m-4 mt-10 " 
+          alt="logo" 
+          src="https://i.ibb.co/NrrKF9j/image-removebg-preview.png"
+        />
                     <button
                         className="px-3 py-1 pb-4 ml-auto text-black outline-none dark:text-gray-300 md:hidden"
                         type="button"
@@ -69,23 +71,23 @@ export default function Header() {
                         }
                     >
                         <div className="flex flex-wrap items-center justify-center pt-1 pl-2 ml-1 space-x-8 md:space-x-16 md:mx-auto md:pl-14">
-                            <Link href="/mask" className="text-black transition duration-300">
+                            <Link href="/pay" className="text-white transition duration-300">
                                 Payment
                             </Link>
-                            <Link href="/demask" className="text-black transition duration-300">
+                            <Link href="/receiver" className="text-white transition duration-300">
                                 Recieve
                             </Link>
-                            <Link href="/validate" className="text-black transition duration-300">
+                            <Link href="/lender" className="text-white transition duration-300">
                                 Exchange Cash
                             </Link>
-                            <Link href="/dashboard" className="text-black transition duration-300">
+                            <Link href="/history" className="text-white transition duration-300">
                                 History
                             </Link>
                         </div>
                     </div>
                     {isAuthenticated ? (
                         <button
-                            className="invisible md:visible px-3 py-1.5 transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black bg-black dark:bg-white rounded"
+                            className="invisible md:visible px-3 py-1.5 transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black bg-black dark:bg-black rounded"
                             onClick={handleSignOut}
                         >
                             Sign Out
@@ -95,7 +97,7 @@ export default function Header() {
                             href="/login"
                             rel="noopener noreferrer"
                             target="_blank"
-                            className="invisible md:visible px-3 py-1.5 transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black bg-black dark:bg-white rounded"
+                            className="invisible md:visible px-3 py-1.5 transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black bg-black dark:bg-black rounded"
                         >
                             Sign up
                         </Link>

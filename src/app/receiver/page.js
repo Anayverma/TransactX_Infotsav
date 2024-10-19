@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NavBar from '../../components/NavBar.jsx'; // Import Navbar
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'; // Leaflet components
 import 'leaflet/dist/leaflet.css'; // Leaflet's CSS
@@ -23,6 +23,7 @@ const ReceiverPage = () => {
   const [username, setUsername] = useState('');
   const [nearbyUpiIds, setNearbyUpiIds] = useState([]);
   const [error, setError] = useState(''); // For error messages
+  const mapRef = useRef(); // Ref for the map
 
   // Fetch and set username from localStorage on client-side
   useEffect(() => {
@@ -93,6 +94,13 @@ const ReceiverPage = () => {
     }
   };
 
+  // Update the map's view to the receiver's location when it changes
+  useEffect(() => {
+    if (receiverLocation && mapRef.current) {
+      mapRef.current.setView([receiverLocation.latitude, receiverLocation.longitude], 13);
+    }
+  }, [receiverLocation]);
+
   return (
     <div style={styles.pageContainer}>
       <NavBar /> {/* Add the Navbar here */}
@@ -148,6 +156,7 @@ const ReceiverPage = () => {
             center={[20.5937, 78.9629]} // Default center for the map
             zoom={13}
             style={{ height: '100%', borderRadius: '15px' }} // Ensure the map takes full height
+            ref={mapRef} // Attach the ref to the MapContainer
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

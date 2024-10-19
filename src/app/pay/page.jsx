@@ -2,8 +2,7 @@ import ConnectWallet from '../../components/ConnectWallet.js';
 
 const App = () => {
   return (
-    <div>
-      <h1>Send Payment</h1>
+    <div className="bg-black min-h-screen">
       <ConnectWallet />
     </div>
   );

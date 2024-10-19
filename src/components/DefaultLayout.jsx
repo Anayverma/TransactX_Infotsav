@@ -10,14 +10,14 @@ export default function DefaultLayout({
     return (
         <>
             {/* <!-- ===== Page Wrapper Star ===== --> */}
-            <div className="flex h-screen overflow-hidden">
+            <div className="flex h-screen overflow-hidden bg-black">
                 {/* <!-- ===== Sidebar Star ===== --> */}
 
                 <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                 {/* <!-- ===== Sidebar End ===== --> */}
 
                 {/* <!-- ===== Content Area Star ===== --> */}
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-black">
                     {/* <!-- ===== Header Star ===== --> */}
 
 
@@ -26,7 +26,7 @@ export default function DefaultLayout({
                     {/* <!-- ===== Main Content Star ===== --> */}
                     <main>
 
-                        <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+                        <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-black">
                             <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                             {children}
                         </div>

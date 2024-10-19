@@ -3,6 +3,7 @@ import React, { useState ,useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import Navbar from './NavBar.jsx';
 
 // Custom hook for managing localStorage
 function useLocalStorage(key, initialValue) {
@@ -221,12 +222,17 @@ const Signup = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center p-8 max-w-lg mx-auto border border-gray-300 rounded-lg bg-white shadow-md">
-      <h2 className="text-2xl font-semibold mb-6">Sign Up</h2>
+    <div className="container mx-auto p-6 sm:p-8 md:p-10 lg:p-12 bg-black relative min-h-screen">
+    
+      <Navbar className=" top-0 left-0 w-full"></Navbar>
+    <div className="flex flex-col items-center p-8 max-w-lg mx-auto border border-gray-300 rounded-lg bg-black shadow-md" style={styles.contentContainer}>
+    <h2 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-gray-400 to-black text-center mb-6">
+          Sign Up
+        </h2>
       <form onSubmit={handleSubmit} className="w-full space-y-6">
         {/* Username */}
         <div>
-          <label htmlFor="username" className="block mb-2 text-gray-700">
+          <label htmlFor="username" className="block text-gray-400 text-sm mb-2">
             Username
           </label>
           <input
@@ -234,14 +240,14 @@ const Signup = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-md bg-[#2c2c2c] text-white"
             required
           />
         </div>
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block mb-2 text-gray-700">
+          <label htmlFor="email" className="block text-gray-400 text-sm mb-2">
             Email
           </label>
           <input
@@ -249,14 +255,14 @@ const Signup = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-md bg-[#2c2c2c] text-white"
             required
           />
         </div>
 
         {/* Mobile */}
         <div>
-          <label htmlFor="mobile" className="block mb-2 text-gray-700">
+          <label htmlFor="mobile" className="block text-gray-400 text-sm mb-2">
             Mobile Number
           </label>
           <input
@@ -264,14 +270,14 @@ const Signup = () => {
             type="text"
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-md bg-[#2c2c2c] text-white"
             required
           />
         </div>
 
         {/* Password */}
         <div>
-          <label htmlFor="password" className="block mb-2 text-gray-700">
+          <label htmlFor="password" className="block text-gray-400 text-sm mb-2">
             Password
           </label>
           <input
@@ -279,14 +285,14 @@ const Signup = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-md bg-[#2c2c2c] text-white"
             required
           />
         </div>
 
         {/* Re-enter Password */}
         <div>
-          <label htmlFor="rePassword" className="block mb-2 text-gray-700">
+          <label htmlFor="rePassword" className="block text-gray-400 text-sm mb-2">
             Re-enter Password
           </label>
           <input
@@ -294,13 +300,13 @@ const Signup = () => {
             type="password"
             value={rePassword}
             onChange={(e) => setRePassword(e.target.value)}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-md bg-[#2c2c2c] text-white"
             required
           />
         </div>
         {otpSent ? (
           <div>
-            <label htmlFor="otp" className="block mb-2 text-gray-700">
+            <label htmlFor="otp" className="block text-gray-400 text-sm mb-2">
               Enter OTP
             </label>
             <input
@@ -308,13 +314,13 @@ const Signup = () => {
               type="text"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border border-gray-300 rounded-md bg-[#2c2c2c] text-white"
               required
             />
             <button
               type="button"
               onClick={handleVerifyOtp}
-              className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+              className="mt-4 w-full bg-[#0d1b2a] text-white px-4 py-2 rounded-md hover:bg-[#2c2c2c]"
             >
               Verify OTP
             </button>
@@ -323,7 +329,7 @@ const Signup = () => {
           <button
             type="button"
             onClick={handleSendOtp}
-            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+            className="mt-4 w-full bg-[#0d1b2a] text-white px-4 py-2 rounded-md hover:bg-[#2c2c2c]"
           >
             Send OTP to Email
           </button>
@@ -331,7 +337,7 @@ const Signup = () => {
 
         {/* State Selection */}
         <div>
-          <label htmlFor="location" className="block mb-2 text-gray-700">
+          <label htmlFor="location" className="block text-gray-400 text-sm mb-2">
             State (Location)
           </label>
           <select
@@ -341,7 +347,7 @@ const Signup = () => {
             className="w-full p-2 border rounded-md"
             required
           >
-            <option value="">Select your state</option>
+            <option value="" >Select your state</option>
             {indianStates.map((state) => (
               <option key={state} value={state}>
                 {state}
@@ -354,7 +360,7 @@ const Signup = () => {
         <div>
           <button
             type="button"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+            className="mt-4 w-full bg-[#0d1b2a] text-white px-4 py-2 rounded-md hover:bg-[#2c2c2c]"
             onClick={handleWalletIntegration}
           >
             Integrate Wallet (Ethereum Sepolia & Polygon Mumbai)
@@ -369,7 +375,7 @@ const Signup = () => {
               <div>
                 <label
                   htmlFor="selectedWallet"
-                  className="block mb-2 text-gray-700"
+                  className="block text-gray-400 text-sm mb-2"
                 >
                   Select a Wallet
                 </label>
@@ -377,7 +383,8 @@ const Signup = () => {
                   id="selectedWallet"
                   value={selectedWallet}
                   onChange={(e) => setSelectedWallet(e.target.value)}
-                  className="w-full p-2 border rounded-md"
+
+                  className="w-full p-2 border border-gray-300 rounded-md bg-[#2c2c2c] text-white"
                 >
                   <option value="">Choose a wallet</option>
                   {wallets.map((wallet, index) => (
@@ -409,7 +416,7 @@ const Signup = () => {
             onChange={() => setLendMoney(!lendMoney)}
             className="mr-2"
           />
-          <label htmlFor="lendMoney" className="text-gray-700">
+          <label htmlFor="lendMoney" className="block text-gray-400 text-sm mb-2">
             Lend Money
           </label>
         </div>
@@ -423,7 +430,16 @@ const Signup = () => {
         </button>
       </form>
     </div>
+    </div>
   );
 };
 
 export default Signup;
+
+
+const styles = {
+  contentContainer: {
+    
+    boxShadow: '0 4px 15px rgba(255, 255, 255, 0.9)', 
+  },
+};
