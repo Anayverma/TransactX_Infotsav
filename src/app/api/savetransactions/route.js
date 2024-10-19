@@ -1,155 +1,50 @@
-"use client";
-import React, { useState } from 'react';
-import { ethers } from 'ethers';
+import { Pool } from 'pg';
 
-const SendEth = () => {
-  const [recipient, setRecipient] = useState('');
-  const [amount, setAmount] = useState('');
-  const [accounts, setAccounts] = useState([]);
-  const [upiId, setUpiId] = useState(''); // State for UPI ID
+// Create a PostgreSQL connection pool
+const pool = new Pool({
+  connectionString: process.env.NEXT_PUBLIC_DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
-  // Connect to MetaMask and get the user's account
-  const getAccount = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    
-    if (provider) {
-      try {
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-        setAccounts(accounts);
-        console.log(accounts);
-      } catch (error) {
-        console.error("Error fetching accounts:", error);
-      }
-    } else {
-      alert("Please install MetaMask!");
-    }
-  };
+// Function to check and create the transaction_history table if it doesn't exist
+const checkAndCreateTable = async () => {
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS transaction_history (
+      id SERIAL PRIMARY KEY,
+      sender_address VARCHAR(42) NOT NULL,
+      recipient_address VARCHAR(42) NOT NULL,
+      amount NUMERIC NOT NULL,
+      timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
 
-  // Fetch the recipient wallet address using the UPI ID
-  const fetchRecipientWallet = async () => {
-    try {
-      const response = await fetch('/api/getWalletFromUPI', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ upiId }), // Send UPI ID (email) to the API
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        setRecipient(data.recipientWallet); // Set the recipient to the wallet address returned
-      } else {
-        console.error('Error fetching recipient wallet:', data.message);
-      }
-    } catch (error) {
-      console.error('Fetch error:', error);
-    }
-  };
-
-  // Function to send Ethereum and save transaction details
-  const sendEth = async () => {
-    if (!recipient || !amount) {
-      alert("Please enter recipient address and amount.");
-      return;
-    }
-
-    const amountInWei = ethers.utils.parseUnits(amount, 'ether'); // Convert amount to Wei
-
-    try {
-      const add = localStorage.getItem("default_wallet").substring(1, 43); // Get sender address
-      console.log(add);
-
-      // Send the Ethereum transaction
-      const txHash = await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [
-          {
-            from: add,
-            to: recipient,
-            value: amountInWei._hex,
-            gasLimit: '0x5028',
-            maxPriorityFeePerGas: '0x3b9aca00',
-            maxFeePerGas: '0x2540be400',
-          },
-        ],
-      });
-      console.log("Transaction Hash:", txHash);
-
-      // Save the transaction details to the database
-      await saveTransaction(add, recipient, amount);
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
-  };
-
-  // Function to save transaction details to the database
-  const saveTransaction = async (senderAddress, recipientAddress, amount) => {
-    try {
-      const response = await fetch('/api/savetransaction', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ senderAddress, recipientAddress, amount }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data.message);
-      } else {
-        console.error('Error saving transaction:', data.message);
-      }
-    } catch (error) {
-      console.error('Error saving transaction:', error);
-    }
-  };
-
-  return (
-    <div>
-      <button className="enableEthereumButton" onClick={getAccount}>
-        Connect MetaMask
-      </button>
-
-      <h2>Send Ethereum</h2>
-      <div>
-        <label>
-          UPI ID (Email):
-          <input
-            type="text"
-            value={upiId}
-            onChange={(e) => setUpiId(e.target.value)}
-            placeholder="Enter UPI ID"
-          />
-        </label>
-        <button onClick={fetchRecipientWallet}>Fetch Recipient Wallet</button>
-      </div>
-      <div>
-        <label>
-          Recipient Address:
-          <input
-            type="text"
-            value={recipient}
-            readOnly // Make this read-only since it will be fetched
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          Amount (ETH):
-          <input
-            type="text"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-          />
-        </label>
-      </div>
-      <button className="sendEthButton" onClick={sendEth}>
-        Send Ethereum
-      </button>
-    </div>
-  );
+  try {
+    await pool.query(createTableQuery);
+    console.log("Transaction history table checked/created successfully.");
+  } catch (error) {
+    console.error("Error creating transaction history table:", error);
+  }
 };
 
-export default SendEth;
+export async function POST(req) {
+  // Ensure the table exists before processing the transaction
+  await checkAndCreateTable();
+
+  const { senderAddress, recipientAddress, amount } = await req.json();
+
+  if (!senderAddress || !recipientAddress || !amount) {
+    return new Response(JSON.stringify({ message: 'Sender address, recipient address, and amount are required.' }), { status: 400 });
+  }
+
+  try {
+    // Insert the transaction into the database
+    await pool.query(
+      'INSERT INTO transaction_history (sender_address, recipient_address, amount) VALUES ($1, $2, $3)',
+      [senderAddress, recipientAddress, amount]
+    );
+    return new Response(JSON.stringify({ message: 'Transaction saved successfully.' }), { status: 200 });
+  } catch (error) {
+    console.error('Error saving transaction:', error);
+    return new Response(JSON.stringify({ message: 'Server error' }), { status: 500 });
+  }
+}
