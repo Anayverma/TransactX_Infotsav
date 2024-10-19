@@ -19,7 +19,10 @@ const Home = () => {
      
       <div className="max-w-vw  mx-auto flex flex-col items-center justify-around min-h-[800px]  px-4 md:flex-row md:px-7 z-10 ">
         <div className="flex flex-col justify-center h-full order-2 md:order-1 gap-4 z-10">
-          <h3 className="text-4xl sm:text-[55px] text-[#0B8AC4]">Introducing</h3>
+        <h3 className="text-4xl sm:text-[55px] text-black shadow-2xl" style={{ textShadow: '0 0 0 #FFFFFF' }}>
+  Introducing
+</h3>
+
           <h3 className="text-4xl sm:text-[55px] font-bold text-white"></h3>
           <Checked></Checked>
           <p className="text-gray-500 py-4 max-w-md text-justify">
